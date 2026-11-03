@@ -15,7 +15,7 @@ import {
   Inbox as InboxIcon,
 } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
-import { el, enUS } from 'date-fns/locale';
+import { getDateLocale } from '../../lib/dateLocale';
 import type { Locale } from 'date-fns';
 import {
   notificationService,
@@ -59,7 +59,7 @@ const SOURCE_COLORS: Record<string, string> = {
 
 export function AdminNotificationCenter() {
   const { t, i18n } = useTranslation();
-  const dateLocale: Locale = i18n.language === 'el' ? el : enUS;
+  const dateLocale: Locale = getDateLocale(i18n.language);
   const user = useAuthStore((s) => s.user);
   const isSystemAdmin = user?.role === 'SYSTEM_ADMIN';
 

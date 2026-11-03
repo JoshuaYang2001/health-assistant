@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect } from 'react';
 import { updatePatient } from '../../../services/patientService';
 import type { Patient } from '../../../types/patient';
@@ -12,6 +13,7 @@ const GENDERS = ['male', 'female', 'other', 'unknown'] as const;
  * "completed" state; the backend is authoritative).
  */
 export const DemographicsSection: React.FC<SectionProps> = ({ patient, onSaved }) => {
+  const { t } = useTranslation();
   const [birthDate, setBirthDate] = useState(patient.birth_date ?? '');
   const [gender, setGender] = useState((patient.gender ?? 'unknown').toLowerCase());
   const [mrn, setMrn] = useState(patient.mrn ?? '');
@@ -46,10 +48,10 @@ export const DemographicsSection: React.FC<SectionProps> = ({ patient, onSaved }
 
   return (
     <section>
-      <SectionHeader title="Demographics" description="Date of birth, sex, and medical record number." />
+      <SectionHeader title={t('patient_form.steps.demographics')} description={t('patient_form.demographics_description')} />
 
       <div className="space-y-5">
-        <SetupField label="Date of birth" htmlFor="setup-demographics-dob">
+        <SetupField label={t('patients.dob')} htmlFor="setup-demographics-dob">
           <SetupInput
             id="setup-demographics-dob"
             type="date"
@@ -58,7 +60,7 @@ export const DemographicsSection: React.FC<SectionProps> = ({ patient, onSaved }
           />
         </SetupField>
 
-        <SetupField label="Sex">
+        <SetupField label={t('patients.gender')}>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {GENDERS.map((g) => (
               <button
@@ -71,18 +73,18 @@ export const DemographicsSection: React.FC<SectionProps> = ({ patient, onSaved }
                     : 'bg-white dark:bg-dark-bg border-gray-200 dark:border-dark-border text-gray-600 dark:text-dark-muted hover:bg-gray-50'
                 }`}
               >
-                {g}
+                {t(`patients.gender_labels.${g}`)}
               </button>
             ))}
           </div>
         </SetupField>
 
-        <SetupField label="Medical record number (MRN)" hint="Optional. A patient identifier used by your clinic.">
+        <SetupField label={t('patients.mrn')} hint={t('patient_form.mrn_hint')}>
           <SetupInput
             type="text"
             value={mrn}
             onChange={(e) => { setMrn(e.target.value); setSaved(false); }}
-            placeholder="e.g. PAT-123456"
+            placeholder={t('patient_form.mrn_placeholder')}
           />
         </SetupField>
       </div>

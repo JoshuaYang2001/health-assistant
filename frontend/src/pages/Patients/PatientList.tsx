@@ -159,7 +159,7 @@ function Patients() {
                   
                   <div className="flex items-center space-x-2 mt-2">
                     <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-sm ${getGenderColor(patient.gender)}`}>
-                      {patient.gender}
+                      {t(`patients.gender_labels.${patient.gender?.toLowerCase() || 'unknown'}`, { defaultValue: t('common.unknown') })}
                     </span>
                     {patient.mrn && (
                       <span className="px-2 py-0.5 text-[10px] font-bold uppercase bg-gray-100 dark:bg-dark-bg text-gray-600 dark:text-dark-muted rounded-sm">
@@ -172,7 +172,7 @@ function Patients() {
                     <div className="flex items-center text-sm text-gray-500 dark:text-dark-muted">
                       <Calendar className="w-4 h-4 mr-2 text-gray-400" />
                       <span>
-                        {t('patients.born')}: {patient.birth_date || 'Unknown'} 
+                        {t('patients.born')}: {patient.birth_date || t('common.unknown')}
                         { patient.birth_date && (
                           <span className="ml-1 text-gray-400 font-medium">
                             ({formatAge(patient.birth_date)})

@@ -496,7 +496,7 @@ function Dashboard() {
   const createLayoutFromTemplate = async () => {
     if (!currentPatient?.id) return;
     try {
-      const name = prompt(t('dashboard.layout_name_prompt'), `Template Layout ${layoutsList.length + 1}`);
+      const name = prompt(t('dashboard.layout_name_prompt'), t('dashboard.template_layout_name', { number: layoutsList.length + 1 }));
       if (!name) return;
       
       const newLayout = await createPatientLayout(currentPatient.id, {
@@ -511,7 +511,7 @@ function Dashboard() {
       switchLayout(newLayout);
     } catch (err: any) {
       if (err?.response?.status === 404) {
-        alert(`Patient not found. Please ensure the patient exists in the system.`);
+        alert(t('dashboard.patient_not_found'));
       } else {
         console.error('Failed to create layout:', err);
       }
@@ -521,7 +521,7 @@ function Dashboard() {
   const duplicateCurrentLayout = async () => {
     if (!currentPatient?.id) return;
     try {
-      const name = prompt(t('dashboard.layout_name_prompt'), `${activeLayout?.name || 'Layout'} (Copy)`);
+      const name = prompt(t('dashboard.layout_name_prompt'), t('dashboard.copy_layout_name', { name: activeLayout?.name || t('dashboard.layout_label') }));
       if (!name) return;
       
       const newLayout = await createPatientLayout(currentPatient.id, {
@@ -536,7 +536,7 @@ function Dashboard() {
       switchLayout(newLayout);
     } catch (err: any) {
       if (err?.response?.status === 404) {
-        alert(`Patient not found. Please ensure the patient exists in the system.`);
+        alert(t('dashboard.patient_not_found'));
       } else {
         console.error('Failed to create layout:', err);
       }
@@ -546,7 +546,7 @@ function Dashboard() {
   const renameLayout = async () => {
     if (!currentPatient?.id || !activeLayout) return;
     try {
-      const name = prompt('Enter new layout name:', activeLayout.name);
+      const name = prompt(t('dashboard.rename_layout_prompt'), activeLayout.name);
       if (!name || name === activeLayout.name) return;
       
       const updatedLayout = await updatePatientLayout(currentPatient.id, activeLayout.id, {
@@ -573,7 +573,7 @@ function Dashboard() {
       loadLayout();
     } catch (err: any) {
       if (err?.response?.status === 404) {
-        alert('Layout not found.');
+        alert(t('dashboard.layout_not_found'));
       } else {
         console.error('Failed to delete layout:', err);
       }
@@ -601,7 +601,7 @@ function Dashboard() {
   const generateAndSaveSmartLayout = async (type: string) => {
     if (!currentPatient?.id) return;
     try {
-      const typeName = type.charAt(0).toUpperCase() + type.slice(1);
+      const typeName = t(`dashboard.smart_types.${type}`);
       
       // Calculate layout based on current data
       const { cards: newCards, layout: newLayout } = generateSmartLayout(type, {
@@ -617,7 +617,7 @@ function Dashboard() {
 
       // Save to backend as a NORMAL editable layout
       const savedLayout = await createPatientLayout(currentPatient.id, {
-        name: `Smart Overview (${typeName})`,
+        name: t('dashboard.smart_layout_name', { type: typeName }),
         is_default: false,
         layout_config: newLayout,
         cards_config: newCards
@@ -641,7 +641,7 @@ function Dashboard() {
       setIsEditMode(false);
     } catch (err: any) {
       if (err?.response?.status === 404) {
-        alert('Patient or layout not found.');
+        alert(t('dashboard.patient_or_layout_not_found'));
       } else {
         console.error('Failed to save layout:', err);
       }
@@ -746,7 +746,7 @@ function Dashboard() {
     }
 
     const Component = resolveCardComponent(card.type);
-    if (!Component) return <div key={card.id}>Unknown Card Type</div>;
+    if (!Component) return <div key={card.id}>{t('dashboard.unknown_card_type')}</div>;
 
     const baseProps = {
       id: card.id,
@@ -773,7 +773,7 @@ function Dashboard() {
       <PageHeader
         title={t('dashboard.title')}
         subtitle={currentPatient ? `${currentPatient.name?.given?.join(' ')} ${currentPatient.name?.family}` : t('dashboard.all_patients')}
-        icon={<img src={theme === 'dark' ? '/icon.svg' : '/icon-light.svg'} className="w-6 h-6" alt="Dashboard" />}
+        icon={<img src={theme === 'dark' ? '/icon.svg' : '/icon-light.svg'} className="w-6 h-6" alt={t('common.dashboard')} />}
       />
 
       <StickyToolbar
@@ -803,7 +803,7 @@ function Dashboard() {
                     <button 
                       onClick={(e) => { e.stopPropagation(); setDefaultLayout(l.id); }}
                       className={`ml-2 p-1 rounded-md transition-colors ${l.is_default ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-300 hover:text-gray-500 dark:text-dark-muted dark:hover:text-gray-300'}`}
-                      title={l.is_default ? t('dashboard.default_label') : 'Set as default'}
+                      title={l.is_default ? t('dashboard.default_label') : t('dashboard.set_as_default')}
                     >
                       <Star className={`w-4 h-4 ${l.is_default ? 'fill-current' : ''}`} />
                     </button>
@@ -815,49 +815,49 @@ function Dashboard() {
                     className="w-full text-left px-4 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors flex items-center space-x-2"
                   >
                     <Zap className="w-4 h-4" />
-                    <span>Generate Smart Overview</span>
+                    <span>{t('dashboard.generate_smart_overview')}</span>
                   </button>
                   <button 
                     onClick={() => generateAndSaveSmartLayout('vitals')}
                     className="w-full text-left px-4 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors flex items-center space-x-2"
                   >
                     <Zap className="w-4 h-4" />
-                    <span>Generate Smart Vitals</span>
+                    <span>{t('dashboard.generate_smart_vitals')}</span>
                   </button>
                   <button 
                     onClick={() => generateAndSaveSmartLayout('clinical')}
                     className="w-full text-left px-4 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors flex items-center space-x-2"
                   >
                     <Zap className="w-4 h-4" />
-                    <span>Generate Smart Clinical</span>
+                    <span>{t('dashboard.generate_smart_clinical')}</span>
                   </button>
                   <button 
                     onClick={() => generateAndSaveSmartLayout('compact')}
                     className="w-full text-left px-4 py-2 text-sm text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors flex items-center space-x-2"
                   >
                     <Zap className="w-4 h-4" />
-                    <span>Generate Smart Compact</span>
+                    <span>{t('dashboard.generate_smart_compact')}</span>
                   </button>
                   <button 
                     onClick={createLayoutFromTemplate}
                     className="w-full text-left px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center space-x-2"
                   >
                     <LayoutTemplate className="w-4 h-4" />
-                    <span>Create from Template</span>
+                    <span>{t('dashboard.create_from_template')}</span>
                   </button>
                   <button 
                     onClick={duplicateCurrentLayout}
                     className="w-full text-left px-4 py-2 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center space-x-2"
                   >
                     <Copy className="w-4 h-4" />
-                    <span>Duplicate Layout</span>
+                    <span>{t('dashboard.duplicate_layout')}</span>
                   </button>
                   <button 
                     onClick={renameLayout}
                     className="w-full text-left px-4 py-2 text-sm text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors flex items-center space-x-2"
                   >
                     <Edit2 className="w-4 h-4" />
-                    <span>Rename Layout</span>
+                    <span>{t('dashboard.rename_layout')}</span>
                   </button>
                   {layoutsList.length > 1 && (
                     <button 

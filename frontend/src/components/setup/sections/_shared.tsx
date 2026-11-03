@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { Loader2, CheckCircle2 } from 'lucide-react';
 import type { Patient } from '../../../types/patient';
@@ -16,21 +17,24 @@ export const SectionHeader: React.FC<{ title: string; description?: string; opti
   title,
   description,
   optional,
-}) => (
-  <div className="mb-5">
-    <div className="flex items-center gap-2">
-      <h3 className="text-lg font-bold text-brand-navy dark:text-dark-text">{title}</h3>
-      {optional && (
-        <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 dark:bg-dark-border dark:text-dark-muted">
-          optional
-        </span>
+}) => {
+  const { t } = useTranslation();
+  return (
+    <div className="mb-5">
+      <div className="flex items-center gap-2">
+        <h3 className="text-lg font-bold text-brand-navy dark:text-dark-text">{title}</h3>
+        {optional && (
+          <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 dark:bg-dark-border dark:text-dark-muted">
+            {t('setup.optional')}
+          </span>
+        )}
+      </div>
+      {description && (
+        <p className="mt-1 text-sm text-gray-500 dark:text-dark-muted">{description}</p>
       )}
     </div>
-    {description && (
-      <p className="mt-1 text-sm text-gray-500 dark:text-dark-muted">{description}</p>
-    )}
-  </div>
-);
+  );
+};
 
 /** A labeled field wrapper with consistent wizard styling. */
 export const SetupField: React.FC<{
@@ -67,21 +71,24 @@ export const SaveBar: React.FC<{
   saved?: boolean;
   disabled?: boolean;
   label?: string;
-}> = ({ onSave, saving, saved, disabled, label = 'Save' }) => (
-  <div className="flex items-center gap-3 mt-6">
-    <button
-      type="button"
-      onClick={onSave}
-      disabled={saving || disabled}
-      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-      {label}
-    </button>
-    {saved && !saving && (
-      <span className="inline-flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
-        <CheckCircle2 className="w-4 h-4" /> Saved
-      </span>
-    )}
-  </div>
-);
+}> = ({ onSave, saving, saved, disabled, label }) => {
+  const { t } = useTranslation();
+  return (
+    <div className="flex items-center gap-3 mt-6">
+      <button
+        type="button"
+        onClick={onSave}
+        disabled={saving || disabled}
+        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+        {label ?? t('common.save')}
+      </button>
+      {saved && !saving && (
+        <span className="inline-flex items-center gap-1 text-sm text-green-600 dark:text-green-400">
+          <CheckCircle2 className="w-4 h-4" /> {t('common.saved')}
+        </span>
+      )}
+    </div>
+  );
+};

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import React, { useState, useEffect, useMemo } from 'react';
 import { updatePatient } from '../../../services/patientService';
 import { getExtensionCatalog } from '../../../services/setupService';
@@ -22,6 +23,7 @@ function findOption(options: ExtensionOption[] | null | undefined, code?: string
  * `onSaved()` so the parent re-polls the checklist.
  */
 export const ExtensionsSection: React.FC<SectionProps> = ({ patient, activeField, onSaved }) => {
+  const { t } = useTranslation();
   const [catalog, setCatalog] = useState<ExtensionCatalog | null>(null);
   const [draft, setDraft] = useState<PatientExtensions>(() => patient.extensions ?? {});
   const [saving, setSaving] = useState(false);
@@ -69,18 +71,18 @@ export const ExtensionsSection: React.FC<SectionProps> = ({ patient, activeField
   return (
     <section className="space-y-6">
       <SectionHeader
-        title="Additional demographics"
-        description="Race, ethnicity, preferred language, and insurance — all optional. Stored as FHIR R4 extensions."
+        title={t('patient_form.additional_demographics')}
+        description={t('patient_form.extensions_description')}
         optional
       />
 
-      {!catalog && <p className="text-sm text-gray-400">Loading options…</p>}
+      {!catalog && <p className="text-sm text-gray-400">{t('patient_form.loading_options')}</p>}
 
       {catalog && (
         <>
           {/* Race */}
           <div className={activeField === 'race_or_ethnicity' ? 'ring-2 ring-blue-200 rounded-xl p-3 -m-3' : ''}>
-            <SetupField label="Race">
+            <SetupField label={t('patient_form.race')}>
               <SetupSelect
                 value={draft.race?.ombCategory?.code ?? ''}
                 onChange={(e) => {
@@ -101,11 +103,11 @@ export const ExtensionsSection: React.FC<SectionProps> = ({ patient, activeField
               </SetupSelect>
             </SetupField>
             {currentRace && (
-              <SetupField label="Free-text race">
+              <SetupField label={t('patient_form.free_text_race')}>
                 <SetupInput
                   value={draft.race?.text ?? ''}
                   onChange={(e) => { setDraft((p) => ({ ...p, race: { ...p.race, text: e.target.value } })); touch(); }}
-                  placeholder="Optional descriptive text"
+                  placeholder={t('patient_form.optional_description')}
                 />
               </SetupField>
             )}
@@ -113,7 +115,7 @@ export const ExtensionsSection: React.FC<SectionProps> = ({ patient, activeField
 
           {/* Ethnicity */}
           <div className={activeField === 'race_or_ethnicity' ? 'ring-2 ring-blue-200 rounded-xl p-3 -m-3' : ''}>
-            <SetupField label="Ethnicity">
+            <SetupField label={t('patient_form.ethnicity')}>
               <SetupSelect
                 value={draft.ethnicity?.ombCategory?.code ?? ''}
                 onChange={(e) => {
@@ -137,7 +139,7 @@ export const ExtensionsSection: React.FC<SectionProps> = ({ patient, activeField
 
           {/* Preferred language */}
           <div className={activeField === 'preferred_language' ? 'ring-2 ring-blue-200 rounded-xl p-3 -m-3' : ''}>
-            <SetupField label="Preferred language">
+            <SetupField label={t('patient_form.preferred_language')}>
               <SetupSelect
                 value={draft.preferred_language ?? ''}
                 onChange={(e) => { setDraft((p) => ({ ...p, preferred_language: e.target.value || undefined })); touch(); }}
@@ -152,11 +154,11 @@ export const ExtensionsSection: React.FC<SectionProps> = ({ patient, activeField
 
           {/* Insurance */}
           <div className={activeField === 'insurance_provider' ? 'ring-2 ring-blue-200 rounded-xl p-3 -m-3' : ''}>
-            <SetupField label="Insurance provider" hint="Free text for now. A proper FHIR Coverage resource is on the roadmap.">
+            <SetupField label={t('patient_form.insurance')} hint={t('patient_form.insurance_hint')}>
               <SetupInput
                 value={draft.insurance_provider ?? ''}
                 onChange={(e) => { setDraft((p) => ({ ...p, insurance_provider: e.target.value || undefined })); touch(); }}
-                placeholder="e.g. Acme Health Insurance"
+                placeholder={t('patient_form.insurance_placeholder')}
               />
             </SetupField>
           </div>

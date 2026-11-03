@@ -54,7 +54,7 @@ export const PatientSelect: React.FC<Props> = ({
     const given = patient.name?.given?.join(' ') || '';
     const family = patient.name?.family || '';
     const name = `${given} ${family}`.trim();
-    return name || `Patient ${patient.id.substring(0, 8)}`;
+    return name || t('patients.unnamed', { id: patient.id.substring(0, 8) });
   };
 
   const containerClasses = className.includes('border-none') 
@@ -137,7 +137,7 @@ export const PatientSelect: React.FC<Props> = ({
                           </span>
                           <span className="w-1 h-1 bg-gray-300 rounded-full" />
                           <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter opacity-70">
-                            {patient.mrn || 'NO MRN'}
+                            {patient.mrn || t('patients.no_mrn')}
                           </span>
                         </div>
                       </div>

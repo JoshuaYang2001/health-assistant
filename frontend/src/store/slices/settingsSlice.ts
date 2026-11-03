@@ -37,7 +37,7 @@ const FIELD_DEFAULTS: Record<string, any> = {
   showRelativeScores: true,
   compactDashboard: false,
   dateFormat: 'YYYY-MM-DD',
-  language: 'en',
+  language: i18n.resolvedLanguage || 'en',
   unitSystem: 'metric',
 };
 
@@ -154,7 +154,10 @@ export const useSettingsStore = create<SettingsState>()(
           }
           if (effRes) {
             patch.settingsSources = effRes.sources;
-            Object.assign(patch, applyEffectiveToFields(get(), effRes.settings));
+            if (effRes.sources['localization.language'] === 'default') {
+              effRes.settings['localization.language'] = i18n.resolvedLanguage || 'en';
+            }
+            Object.assign(patch, applyEffectiveToFields({}, effRes.settings));
             const lang = effRes.settings['localization.language'];
             if (lang && lang !== i18n.language) {
               i18n.changeLanguage(lang).catch(() => undefined);
@@ -178,6 +181,7 @@ export const useSettingsStore = create<SettingsState>()(
 
       updateUserSetting: async (key, value) => {
         const prevEffective = { ...get().effectiveSettings };
+        const previousLanguage = get().language;
         // Optimistic local update
         set((state) => applyEffectiveToFields(state, { ...state.effectiveSettings, [key]: value }) as SettingsState);
         // Keep i18n in sync for language changes
@@ -189,6 +193,10 @@ export const useSettingsStore = create<SettingsState>()(
         } catch {
           // Revert on hard failure (offline writes resolve via the queue interceptor)
           set((state) => applyEffectiveToFields(state, prevEffective) as SettingsState);
+          if (key === 'localization.language') {
+            set({ language: previousLanguage });
+            await i18n.changeLanguage(previousLanguage);
+          }
           throw new Error('Failed to save setting');
         }
       },
@@ -202,8 +210,6 @@ export const useSettingsStore = create<SettingsState>()(
 
       setTheme: (theme) => set({ theme }),
       setLanguage: (language) => {
-        set({ language });
-        i18n.changeLanguage(language);
         get().updateUserSetting('localization.language', language).catch(() => undefined);
       },
       setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),

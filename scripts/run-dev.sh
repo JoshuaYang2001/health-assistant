@@ -34,7 +34,7 @@ BACKEND_PORT="${BACKEND_PORT:-8000}"
 FRONTEND_PORT="${FRONTEND_PORT:-3000}"
 FLOWER_PORT="${FLOWER_PORT:-5555}"
 REDIS_PORT="${REDIS_PORT:-6379}"
-VENV_DIR="venv"
+VENV_DIR="$PWD/.venv"
 
 NO_ADMIN=false
 NO_BOOTSTRAP=false
@@ -113,12 +113,9 @@ dc_check_port_warn "$FRONTEND_PORT" "frontend (vite will pick an alternative por
 
 if [[ "$NO_BOOTSTRAP" = false ]]; then
   dc_step "preparing backend environment"
-  cd backend
-  if [[ -d ".venv" ]]; then
-    VENV_DIR=".venv"
-  fi
   uv sync --frozen
-  export PATH="$PWD/$VENV_DIR/bin:$PATH"
+  export PATH="$VENV_DIR/bin:$PATH"
+  cd backend
 
   # PYTHONPATH needs backend only — the extension subsystem lives inside
   # the app package (backend/app/extensions, ADR-0040 D24). The bridge SDK
@@ -127,7 +124,7 @@ if [[ "$NO_BOOTSTRAP" = false ]]; then
   export PYTHONPATH="$PWD"
 
   dc_step "running database migrations"
-  alembic upgrade head || dc_error "Migration failed. Proceeding anyway..."
+  alembic upgrade head
 
   if [[ "$NO_ADMIN" = true ]]; then
     dc_warn "Skipping admin creation (--no-admin)."
@@ -145,14 +142,14 @@ if [[ "$NO_BOOTSTRAP" = false ]]; then
 fi
 
 # Make the venv's honcho/alembic/python resolvable even with --no-bootstrap.
-if [[ -d "backend/$VENV_DIR/bin" ]]; then
-  export PATH="$PWD/backend/$VENV_DIR/bin:$PATH"
+if [[ -d "$VENV_DIR/bin" ]]; then
+  export PATH="$VENV_DIR/bin:$PATH"
 fi
 
 # Pre-flight: warn if Redis is not running (celery worker + beat + flower all need it).
 if ! dc_port_in_use "$REDIS_PORT"; then
   dc_warn "Redis (port $REDIS_PORT) is not running. Worker/beat/flower will fail to connect."
-  dc_warn "Start it via: docker compose --env-file .env -f docker/docker-compose.dev-db.yml up -d redis"
+  dc_warn "Start it via: docker compose --env-file .env -f docker/docker-compose.dev-db.yml up -d redis-dev1"
 fi
 
 # Clean up any stale celery beat lock from a previous run.
@@ -162,7 +159,7 @@ rm -f backend/celerybeat.pid
 rm -f logging/celery.log logging/celery.*.log
 
 # Snapshot the LAN IP for the success banner (best-effort, non-fatal).
-LAN_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
+LAN_IP=$(hostname -I 2>/dev/null | awk '{print $1}' || true)
 [ -z "$LAN_IP" ] && LAN_IP="localhost"
 
 echo -e "${DC_GREEN}================================${DC_NC}"

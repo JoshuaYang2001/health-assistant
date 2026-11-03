@@ -11,7 +11,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ExternalLink, GitBranch, ArrowUpDown, ArrowUp, ArrowDown, SearchX, Inbox, ChevronDown, Loader2, Plus, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow } from 'date-fns';
-import { el, enUS } from 'date-fns/locale';
+import { getDateLocale } from '../../lib/dateLocale';
 import type { Locale } from 'date-fns';
 import type { CatalogItem } from '../../types/catalog';
 import { ScopeBadge } from './ScopeBadge';
@@ -163,7 +163,7 @@ export const CatalogBrowser: React.FC<CatalogBrowserProps> = ({
 }) => {
   const { t, i18n } = useTranslation();
   const currentUserId = useAuthStore((s) => s.user?.id ?? null);
-  const locale: Locale = i18n.language.startsWith('el') ? el : enUS;
+  const locale: Locale = getDateLocale(i18n.language);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   // Tracks whether we've performed the initial scroll for this mount. The
   // workspace remounts the browser per catalog type (`key={active.type}`), so

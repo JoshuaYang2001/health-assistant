@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (localization)
+- Simplified Chinese interface translations with language switching on login,
+  first-run setup, the header, and preferences. Chinese selections persist in
+  user settings; relative dates and the patient onboarding flow follow the locale.
+- Language regression coverage for browser detection, translation completeness,
+  settings persistence, override precedence, and failed-save rollback.
+
+### Fixed (local development)
+- Use the uv workspace virtual environment and tolerate the unavailable Linux
+  LAN-address command on macOS. Stop startup when database migrations fail.
+- Honor loopback bind settings and worker concurrency in the development
+  Procfile, and protect Flower with the configured credentials.
+- Preserve settings loading metadata and restore the active language when saving
+  a language preference fails.
+
 ### Changed (extensions — per-extension documentation is a validated contract)
 - **The four builtin doc trees migrated to the family `extensionDocsTree`
   form (the extension-docs contract's 'Per-extension documentation'

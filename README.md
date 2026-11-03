@@ -109,7 +109,8 @@ It is **Beta** software, built for self-hosters and technical users first.
 - **Installable PWA** — add it to your phone or desktop, works offline, supports push notifications.
 - **Draggable dashboard** — arrange the cards (trend charts, imaging previews, reminders) per person and save the layout.
 - **Secure full-screen viewers** for images, PDFs, and Markdown documents.
-- **Languages** — English and Greek.
+- **Languages** — English, Simplified Chinese, and Greek. Switch languages on the
+  login/setup page, in the header, or under Settings → Preferences.
 
 ### Connect your tools
 

@@ -15,7 +15,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { el, enUS } from 'date-fns/locale';
+import { getDateLocale } from '../../lib/dateLocale';
 import type { Locale } from 'date-fns';
 import {
   notificationService,
@@ -69,7 +69,7 @@ const EMPTY_FORM: RuleFormState = {
 
 export function NotificationRules({ patientId }: { patientId?: string }) {
   const { t, i18n } = useTranslation();
-  const dateLocale: Locale = i18n.language === 'el' ? el : enUS;
+  const dateLocale: Locale = getDateLocale(i18n.language);
   const user = useAuthStore((s) => s.user);
 
   const [rules, setRules] = useState<NotificationRule[]>([]);

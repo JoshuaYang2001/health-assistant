@@ -15,7 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useNotificationStore } from '../../store/notificationStore';
 import { formatDistanceToNow } from 'date-fns';
-import { el, enUS } from 'date-fns/locale';
+import { getDateLocale } from '../../lib/dateLocale';
 import { useTranslation } from 'react-i18next';
 import type { NotificationCategory, NotificationEvent, NotificationSeverity, NotificationAction, NotificationInboxItem } from '../../services/notificationService';
 import { useNotificationStream } from '../../hooks/useNotificationStream';
@@ -80,7 +80,7 @@ export function NotificationBell() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const dateLocale = i18n.language === 'el' ? el : enUS;
+  const dateLocale = getDateLocale(i18n.language);
 
   const handleAction = (event: NotificationEvent, url: string) => {
     setIsOpen(false);

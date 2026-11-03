@@ -163,7 +163,12 @@
     "max_items_reached": "Μέγιστο {{n}} στοιχείων.",
     "add_time": "Προσθήκη ώρας",
     "clear": "Καθάρισμα",
-    "no_patient_setup_action": "Εκτέλεση οδηγού εγκατάστασης"
+    "no_patient_setup_action": "Εκτέλεση οδηγού εγκατάστασης",
+    "select_date": "Select date",
+    "edit_search": "Edit search",
+    "clear_search": "Clear search",
+    "saved": "Saved",
+    "total": "Σύνολο"
   },
   "nav": {
     "close_sidebar": "Κλείσιμο πλευρικής στήλης",
@@ -253,7 +258,30 @@
       "no_documents": "Δεν βρέθηκαν έγγραφα",
       "no_biomarkers": "Δεν βρέθηκαν βιοδείκτες.",
       "clear": "Καθαρό"
-    }
+    },
+    "template_layout_name": "Template Layout {{number}}",
+    "copy_layout_name": "{{name}} (Copy)",
+    "layout_label": "Layout",
+    "rename_layout_prompt": "Enter new layout name:",
+    "patient_not_found": "Patient not found. Please ensure the patient exists in the system.",
+    "layout_not_found": "Layout not found.",
+    "patient_or_layout_not_found": "Patient or layout not found.",
+    "unknown_card_type": "Unknown Card Type",
+    "smart_layout_name": "Smart Overview ({{type}})",
+    "smart_types": {
+      "overview": "Overview",
+      "vitals": "Vitals",
+      "clinical": "Clinical",
+      "compact": "Compact"
+    },
+    "set_as_default": "Set as default",
+    "generate_smart_overview": "Generate Smart Overview",
+    "generate_smart_vitals": "Generate Smart Vitals",
+    "generate_smart_clinical": "Generate Smart Clinical",
+    "generate_smart_compact": "Generate Smart Compact",
+    "create_from_template": "Create from Template",
+    "duplicate_layout": "Duplicate Layout",
+    "rename_layout": "Rename Layout"
   },
   "patients": {
     "directory": "Κατάλογος Ασθενών",
@@ -319,7 +347,19 @@
     "click_to_view": "κάντε κλικ για προβολή",
     "previous": "Προηγούμενο",
     "next": "Επόμενο",
-    "update_profile_title": "Ενημέρωση Προφίλ Ασθενούς"
+    "update_profile_title": "Ενημέρωση Προφίλ Ασθενούς",
+    "gender_labels": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "unknown": "Unknown"
+    },
+    "age_months_one": "{{count}} month",
+    "age_months_other": "{{count}} months",
+    "age_years_one": "{{count}} year",
+    "age_years_other": "{{count}} years",
+    "unnamed": "Patient {{id}}",
+    "no_mrn": "No MRN"
   },
   "examination_detail": {
     "loading": "Αποκατάσταση κλινικού πλαισίου",
@@ -2082,7 +2122,8 @@
     "notifications_channel_push": "Push",
     "notifications_channel_push_desc": "Αποστολή ειδοποιήσεων ως push μηνύματα σε αυτή τη συσκευή.",
     "notifications_channel_email": "Email",
-    "notifications_channel_email_desc": "Αποστολή ειδοποιήσεων στη διεύθυνση email του λογαριασμού σας."
+    "notifications_channel_email_desc": "Αποστολή ειδοποιήσεων στη διεύθυνση email του λογαριασμού σας.",
+    "language_zh": "Απλοποιημένα Κινεζικά"
   },
   "account": {
     "title": "Ο Λογαριασμός μου",
@@ -2547,7 +2588,39 @@
     "insurance": "Πάροχος ασφάλισης",
     "insurance_hint": "Ελεύθερο κείμενο προς το παρόν.",
     "add": "Προσθήκη",
-    "skip_finish": "Παράλειψη & τέλος"
+    "skip_finish": "Παράλειψη & τέλος",
+    "first_name_placeholder": "John",
+    "last_name_placeholder": "Doe",
+    "street": "Street",
+    "street_placeholder": "123 Main St",
+    "full_address": "Full address (one line)",
+    "full_address_placeholder": "123 Main St, Athens, 10000, GR",
+    "city": "City",
+    "postal_code": "Postal code",
+    "country": "Country",
+    "type": "Type",
+    "phone": "Phone",
+    "email": "Email",
+    "sms": "SMS",
+    "value": "Value",
+    "phone_placeholder": "+30 …",
+    "name": "Name",
+    "relationship": "Relationship",
+    "relationship_placeholder": "e.g. Spouse",
+    "insurance_placeholder": "e.g. Acme Health Insurance",
+    "add_address": "Add address",
+    "remove_address": "Remove address",
+    "remove_contact": "Remove contact",
+    "demographics_description": "Date of birth, sex, and medical record number.",
+    "mrn_hint": "Optional. A patient identifier used by your clinic.",
+    "mrn_placeholder": "e.g. PAT-123456",
+    "contact_information": "Contact information",
+    "contacts_description": "Address, phone/email, and an emergency contact.",
+    "additional_demographics": "Additional demographics",
+    "extensions_description": "Race, ethnicity, preferred language, and insurance — all optional. Stored as FHIR R4 extensions.",
+    "loading_options": "Loading options…",
+    "free_text_race": "Free-text race",
+    "optional_description": "Optional descriptive text"
   },
   "integrations": {
     "subtitle": "Διαχειριστείτε τις συνδεδεμένες πηγές δεδομένων υγείας.",
@@ -2602,5 +2675,26 @@
       "secretNotSet": "μη ορισμένο",
       "invalidJson": "Διορθώστε το μη έγκυρο JSON πριν την αποθήκευση."
     }
+  },
+  "first_run": {
+    "welcome": "Welcome — let's create your administrator account.",
+    "intro": "This is a fresh installation. The account you create here becomes the System Administrator for the whole instance.",
+    "organization_label": "Organization / household name",
+    "organization_placeholder": "My Organization",
+    "email_label": "Admin email",
+    "password_label": "Password",
+    "password_placeholder": "At least 8 characters",
+    "confirm_password": "Confirm password",
+    "password_mismatch": "Passwords do not match.",
+    "password_short": "Password must be at least 8 characters.",
+    "token_label": "Setup token",
+    "creating": "Creating account…",
+    "create": "Create admin account",
+    "failed": "Setup failed. Check your details and try again.",
+    "no_session": "Setup did not return a session. Please try again.",
+    "env_token_hint": "The token was provided in the launcher URL (?token=…). If this field is empty, copy it from the launcher or ask your installer.",
+    "time_token_hint": "The token-free setup period has expired. Find the one-time token in the backend container logs:",
+    "log_token_hint": "Find the one-time token in the backend container logs:",
+    "disabled_token_hint": "Token mode is disabled. Check SETUP_TOKEN_MODE in the backend environment if this field appears."
   }
 }

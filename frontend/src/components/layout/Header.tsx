@@ -162,7 +162,7 @@ function Header() {
               <button 
                 onClick={() => navigate(-1)}
                 className="hidden sm:flex w-9 h-9 items-center justify-center text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-all hover:bg-white dark:hover:bg-dark-surface rounded-xl active:scale-90 group/back ml-0.5 shrink-0"
-                title="Go Back"
+                title={t('common.back')}
               >
                 <ArrowLeft className="w-5 h-5 group-hover/back:-translate-x-1 transition-transform" />
               </button>
@@ -266,7 +266,7 @@ function Header() {
           <button 
             onClick={() => isMobile ? navigate('/ai-assistant') : toggleAIDrawer()}
             className="relative p-2 text-indigo-400 hover:text-indigo-600 dark:text-indigo-500/80 dark:hover:text-indigo-400 transition-all hover:scale-110 active:scale-95"
-            title="AI Assistant"
+            title={t('ai_labels.assistant')}
           >
             <Sparkles className="h-5 w-5" />
             <span className="absolute top-0.5 right-0.5 flex h-2 w-2">

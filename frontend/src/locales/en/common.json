@@ -167,7 +167,12 @@
     "max_items_reached": "Maximum of {{n}} items.",
     "add_time": "Add time",
     "clear": "Clear",
-    "no_patient_setup_action": "Run setup wizard"
+    "no_patient_setup_action": "Run setup wizard",
+    "select_date": "Select date",
+    "edit_search": "Edit search",
+    "clear_search": "Clear search",
+    "saved": "Saved",
+    "total": "Total"
   },
   "nav": {
     "close_sidebar": "Close sidebar",
@@ -257,7 +262,30 @@
       "no_documents": "No documents found",
       "no_biomarkers": "No biomarkers found.",
       "clear": "Clear"
-    }
+    },
+    "template_layout_name": "Template Layout {{number}}",
+    "copy_layout_name": "{{name}} (Copy)",
+    "layout_label": "Layout",
+    "rename_layout_prompt": "Enter new layout name:",
+    "patient_not_found": "Patient not found. Please ensure the patient exists in the system.",
+    "layout_not_found": "Layout not found.",
+    "patient_or_layout_not_found": "Patient or layout not found.",
+    "unknown_card_type": "Unknown Card Type",
+    "smart_layout_name": "Smart Overview ({{type}})",
+    "smart_types": {
+      "overview": "Overview",
+      "vitals": "Vitals",
+      "clinical": "Clinical",
+      "compact": "Compact"
+    },
+    "set_as_default": "Set as default",
+    "generate_smart_overview": "Generate Smart Overview",
+    "generate_smart_vitals": "Generate Smart Vitals",
+    "generate_smart_clinical": "Generate Smart Clinical",
+    "generate_smart_compact": "Generate Smart Compact",
+    "create_from_template": "Create from Template",
+    "duplicate_layout": "Duplicate Layout",
+    "rename_layout": "Rename Layout"
   },
   "patients": {
     "directory": "Patients Directory",
@@ -328,7 +356,19 @@
     "click_to_view": "click to view",
     "previous": "Previous",
     "next": "Next",
-    "update_profile_title": "Update Patient Profile"
+    "update_profile_title": "Update Patient Profile",
+    "gender_labels": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other",
+      "unknown": "Unknown"
+    },
+    "age_months_one": "{{count}} month",
+    "age_months_other": "{{count}} months",
+    "age_years_one": "{{count}} year",
+    "age_years_other": "{{count}} years",
+    "unnamed": "Patient {{id}}",
+    "no_mrn": "No MRN"
   },
   "examination_detail": {
     "loading": "Restoring clinical context",
@@ -2143,7 +2183,8 @@
     "notifications_channel_push": "Push",
     "notifications_channel_push_desc": "Deliver notifications as push messages to this device.",
     "notifications_channel_email": "Email",
-    "notifications_channel_email_desc": "Deliver notifications to your account email address."
+    "notifications_channel_email_desc": "Deliver notifications to your account email address.",
+    "language_zh": "Simplified Chinese"
   },
   "account": {
     "title": "My Account",
@@ -2608,7 +2649,39 @@
     "insurance": "Insurance provider",
     "insurance_hint": "Free text for now; a proper FHIR Coverage resource is roadmap.",
     "add": "Add",
-    "skip_finish": "Skip & finish"
+    "skip_finish": "Skip & finish",
+    "first_name_placeholder": "John",
+    "last_name_placeholder": "Doe",
+    "street": "Street",
+    "street_placeholder": "123 Main St",
+    "full_address": "Full address (one line)",
+    "full_address_placeholder": "123 Main St, Athens, 10000, GR",
+    "city": "City",
+    "postal_code": "Postal code",
+    "country": "Country",
+    "type": "Type",
+    "phone": "Phone",
+    "email": "Email",
+    "sms": "SMS",
+    "value": "Value",
+    "phone_placeholder": "+30 …",
+    "name": "Name",
+    "relationship": "Relationship",
+    "relationship_placeholder": "e.g. Spouse",
+    "insurance_placeholder": "e.g. Acme Health Insurance",
+    "add_address": "Add address",
+    "remove_address": "Remove address",
+    "remove_contact": "Remove contact",
+    "demographics_description": "Date of birth, sex, and medical record number.",
+    "mrn_hint": "Optional. A patient identifier used by your clinic.",
+    "mrn_placeholder": "e.g. PAT-123456",
+    "contact_information": "Contact information",
+    "contacts_description": "Address, phone/email, and an emergency contact.",
+    "additional_demographics": "Additional demographics",
+    "extensions_description": "Race, ethnicity, preferred language, and insurance — all optional. Stored as FHIR R4 extensions.",
+    "loading_options": "Loading options…",
+    "free_text_race": "Free-text race",
+    "optional_description": "Optional descriptive text"
   },
   "integrations": {
     "subtitle": "Manage your connected health data sources.",
@@ -2663,5 +2736,26 @@
       "secretNotSet": "not set",
       "invalidJson": "Fix invalid JSON before saving."
     }
+  },
+  "first_run": {
+    "welcome": "Welcome — let's create your administrator account.",
+    "intro": "This is a fresh installation. The account you create here becomes the System Administrator for the whole instance.",
+    "organization_label": "Organization / household name",
+    "organization_placeholder": "My Organization",
+    "email_label": "Admin email",
+    "password_label": "Password",
+    "password_placeholder": "At least 8 characters",
+    "confirm_password": "Confirm password",
+    "password_mismatch": "Passwords do not match.",
+    "password_short": "Password must be at least 8 characters.",
+    "token_label": "Setup token",
+    "creating": "Creating account…",
+    "create": "Create admin account",
+    "failed": "Setup failed. Check your details and try again.",
+    "no_session": "Setup did not return a session. Please try again.",
+    "env_token_hint": "The token was provided in the launcher URL (?token=…). If this field is empty, copy it from the launcher or ask your installer.",
+    "time_token_hint": "The token-free setup period has expired. Find the one-time token in the backend container logs:",
+    "log_token_hint": "Find the one-time token in the backend container logs:",
+    "disabled_token_hint": "Token mode is disabled. Check SETUP_TOKEN_MODE in the backend environment if this field appears."
   }
 }

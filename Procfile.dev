@@ -22,8 +22,8 @@
 # vars live in the root .env, so run-dev.sh, --force-stop, and honcho children
 # always agree on the actual ports.
 
-backend:    cd backend && PYTHONPATH=$(pwd):$(pwd)/.. exec uvicorn app.main:app --reload --host 0.0.0.0 --port ${BACKEND_PORT:-8000}
-worker:     cd backend && PYTHONPATH=$(pwd):$(pwd)/.. HA_LOG_NAME=worker exec celery -A app.workers.celery_app worker --loglevel=info
+backend:    cd backend && PYTHONPATH=$(pwd):$(pwd)/.. exec uvicorn app.main:app --reload --host ${BACKEND_BIND:-127.0.0.1} --port ${BACKEND_PORT:-8000}
+worker:     cd backend && PYTHONPATH=$(pwd):$(pwd)/.. HA_LOG_NAME=worker exec celery -A app.workers.celery_app worker --loglevel=info --concurrency=${CELERY_WORKER_CONCURRENCY:-2}
 beat:       cd backend && PYTHONPATH=$(pwd):$(pwd)/.. HA_LOG_NAME=beat   exec celery -A app.workers.celery_app beat --loglevel=info
-flower:     cd backend && PYTHONPATH=$(pwd):$(pwd)/.. HA_LOG_NAME=flower FLOWER_UNAUTHENTICATED_API=true exec celery -A app.workers.celery_app flower --port=${FLOWER_PORT:-5555}
-frontend:   cd frontend && exec npm run dev -- --host 0.0.0.0 --port ${FRONTEND_PORT:-3000}
+flower:     cd backend && PYTHONPATH=$(pwd):$(pwd)/.. HA_LOG_NAME=flower exec celery -A app.workers.celery_app flower --address=${FLOWER_BIND:-127.0.0.1} --port=${FLOWER_PORT:-5555} --basic-auth=${FLOWER_USER:-admin}:${FLOWER_PASSWORD:?Set FLOWER_PASSWORD in .env}
+frontend:   cd frontend && exec npm run dev -- --host ${FRONTEND_BIND:-127.0.0.1} --port ${FRONTEND_PORT:-3000}

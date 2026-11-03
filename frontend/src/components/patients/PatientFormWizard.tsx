@@ -285,10 +285,10 @@ const BasicInfoStep: React.FC<{ draft: DraftState; patch: (p: Partial<DraftState
   <div className="space-y-4">
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <SetupField label={t('patients.first_name', 'First name')} htmlFor="pfw-first">
-        <SetupInput id="pfw-first" value={draft.firstName} onChange={(e) => patch({ firstName: e.target.value })} placeholder="John" />
+        <SetupInput id="pfw-first" value={draft.firstName} onChange={(e) => patch({ firstName: e.target.value })} placeholder={t('patient_form.first_name_placeholder')} />
       </SetupField>
       <SetupField label={t('patients.last_name', 'Last name')} htmlFor="pfw-last">
-        <SetupInput id="pfw-last" value={draft.lastName} onChange={(e) => patch({ lastName: e.target.value })} placeholder="Doe" />
+        <SetupInput id="pfw-last" value={draft.lastName} onChange={(e) => patch({ lastName: e.target.value })} placeholder={t('patient_form.last_name_placeholder')} />
       </SetupField>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -306,7 +306,7 @@ const BasicInfoStep: React.FC<{ draft: DraftState; patch: (p: Partial<DraftState
           <button key={g} type="button" onClick={() => patch({ gender: g })}
             className={`px-3 py-2 rounded-xl text-sm font-medium border transition-all capitalize ${
               draft.gender === g ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white dark:bg-dark-bg border-gray-200 dark:border-dark-border text-gray-600 dark:text-dark-muted hover:bg-gray-50'
-            }`}>{g}</button>
+            }`}>{t(`patients.gender_labels.${g}`)}</button>
         ))}
       </div>
     </SetupField>
@@ -331,12 +331,12 @@ const ContactInfoStep: React.FC<{ draft: DraftState; patch: (p: Partial<DraftSta
         </div>
         {draft.addresses.map((a, i) => (
           <div key={i} className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2 p-3 rounded-xl bg-gray-50 dark:bg-dark-bg/50">
-            <SetupField label="Street"><SetupInput value={a.line ?? ''} onChange={(e) => patchAddr(i, 'line', e.target.value)} placeholder="123 Main St" /></SetupField>
-            <SetupField label="City"><SetupInput value={a.city ?? ''} onChange={(e) => patchAddr(i, 'city', e.target.value)} /></SetupField>
-            <SetupField label="Postal code"><SetupInput value={a.postalCode ?? ''} onChange={(e) => patchAddr(i, 'postalCode', e.target.value)} /></SetupField>
-            <SetupField label="Country"><SetupInput value={a.country ?? ''} onChange={(e) => patchAddr(i, 'country', e.target.value)} /></SetupField>
+            <SetupField label={t('patient_form.street')}><SetupInput value={a.line ?? ''} onChange={(e) => patchAddr(i, 'line', e.target.value)} placeholder={t('patient_form.street_placeholder')} /></SetupField>
+            <SetupField label={t('patient_form.city')}><SetupInput value={a.city ?? ''} onChange={(e) => patchAddr(i, 'city', e.target.value)} /></SetupField>
+            <SetupField label={t('patient_form.postal_code')}><SetupInput value={a.postalCode ?? ''} onChange={(e) => patchAddr(i, 'postalCode', e.target.value)} /></SetupField>
+            <SetupField label={t('patient_form.country')}><SetupInput value={a.country ?? ''} onChange={(e) => patchAddr(i, 'country', e.target.value)} /></SetupField>
             {draft.addresses.length > 1 && (
-              <button type="button" onClick={() => patch({ addresses: draft.addresses.filter((_, idx) => idx !== i) })} className="text-xs text-red-400 hover:text-red-600 self-end">Remove</button>
+              <button type="button" onClick={() => patch({ addresses: draft.addresses.filter((_, idx) => idx !== i) })} className="text-xs text-red-400 hover:text-red-600 self-end">{t('common.remove')}</button>
             )}
           </div>
         ))}
@@ -350,15 +350,15 @@ const ContactInfoStep: React.FC<{ draft: DraftState; patch: (p: Partial<DraftSta
         </div>
         {draft.telecom.map((tc, i) => (
           <div key={i} className="grid grid-cols-[120px_1fr_auto] gap-2 items-end mb-2">
-            <SetupField label="Type">
+            <SetupField label={t('patient_form.type')}>
               <select value={tc.system ?? 'phone'} onChange={(e) => patchTel(i, 'system', e.target.value)}
                 className="w-full rounded-xl border border-gray-200 dark:border-dark-border bg-gray-50 dark:bg-dark-bg px-3 py-2.5 text-sm dark:text-dark-text">
-                <option value="phone">Phone</option><option value="email">Email</option><option value="sms">SMS</option>
+                <option value="phone">{t('patient_form.phone')}</option><option value="email">{t('patient_form.email')}</option><option value="sms">{t('patient_form.sms')}</option>
               </select>
             </SetupField>
-            <SetupField label="Value"><SetupInput value={tc.value ?? ''} onChange={(e) => patchTel(i, 'value', e.target.value)} placeholder="+30 ..." /></SetupField>
+            <SetupField label={t('patient_form.value')}><SetupInput value={tc.value ?? ''} onChange={(e) => patchTel(i, 'value', e.target.value)} placeholder={t('patient_form.phone_placeholder')} /></SetupField>
             {draft.telecom.length > 1 && (
-              <button type="button" onClick={() => patch({ telecom: draft.telecom.filter((_, idx) => idx !== i) })} className="text-xs text-red-400 hover:text-red-600 pb-2.5">✕</button>
+              <button type="button" onClick={() => patch({ telecom: draft.telecom.filter((_, idx) => idx !== i) })} className="text-xs text-red-400 hover:text-red-600 pb-2.5" aria-label={t('patient_form.remove_contact')}>✕</button>
             )}
           </div>
         ))}
@@ -368,9 +368,9 @@ const ContactInfoStep: React.FC<{ draft: DraftState; patch: (p: Partial<DraftSta
       <div>
         <h4 className="text-xs font-bold uppercase tracking-wide text-gray-400 mb-2">{t('patient_form.emergency_contact', 'Emergency contact')}</h4>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <SetupField label="Name"><SetupInput value={draft.emergency.name ?? ''} onChange={(e) => patchEmerg('name', e.target.value)} /></SetupField>
-          <SetupField label="Relationship"><SetupInput value={draft.emergency.relationship ?? ''} onChange={(e) => patchEmerg('relationship', e.target.value)} placeholder="Spouse" /></SetupField>
-          <SetupField label="Phone"><SetupInput value={draft.emergency.phone ?? ''} onChange={(e) => patchEmerg('phone', e.target.value)} /></SetupField>
+          <SetupField label={t('patient_form.name')}><SetupInput value={draft.emergency.name ?? ''} onChange={(e) => patchEmerg('name', e.target.value)} /></SetupField>
+          <SetupField label={t('patient_form.relationship')}><SetupInput value={draft.emergency.relationship ?? ''} onChange={(e) => patchEmerg('relationship', e.target.value)} placeholder={t('patient_form.relationship_placeholder')} /></SetupField>
+          <SetupField label={t('patient_form.phone')}><SetupInput value={draft.emergency.phone ?? ''} onChange={(e) => patchEmerg('phone', e.target.value)} /></SetupField>
         </div>
       </div>
     </div>
@@ -413,7 +413,7 @@ const DemographicsStep: React.FC<{ draft: DraftState; patch: (p: Partial<DraftSt
       </SetupField>
 
       <SetupField label={t('patient_form.insurance', 'Insurance provider')} hint={t('patient_form.insurance_hint', 'Free text for now; a proper FHIR Coverage resource is roadmap.')}>
-        <SetupInput value={draft.extensions.insurance_provider ?? ''} onChange={(e) => patch({ extensions: { ...draft.extensions, insurance_provider: e.target.value || undefined } })} placeholder="Acme Health" />
+        <SetupInput value={draft.extensions.insurance_provider ?? ''} onChange={(e) => patch({ extensions: { ...draft.extensions, insurance_provider: e.target.value || undefined } })} placeholder={t('patient_form.insurance_placeholder')} />
       </SetupField>
     </div>
   );

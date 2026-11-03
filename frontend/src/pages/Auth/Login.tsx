@@ -5,6 +5,7 @@ import { useAuthStore } from '../../store/slices/authSlice';
 import { useSettingsStore } from '../../store/slices/settingsSlice';
 import api from '../../api/axios';
 import AppVersion from '../../components/ui/AppVersion';
+import { AuthLanguageSelect } from '../../components/ui/AuthLanguageSelect';
 import { QRCodeSVG } from 'qrcode.react';
 import { Copy, Check } from 'lucide-react';
 import {
@@ -241,6 +242,7 @@ function Login({ onSignedIn }: { onSignedIn?: () => void }) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-dark-bg">
         <div className="max-w-md w-full bg-white dark:bg-dark-surface rounded-lg shadow-md p-8">
+          <AuthLanguageSelect />
           <div className="text-center mb-6">
             <img src={theme === 'dark' ? '/icon.svg' : '/icon-light.svg'} className="w-12 h-12 mx-auto mb-3" alt="Health Assistant Logo" />
             <h1 className="text-2xl font-bold text-blue-600">
@@ -341,6 +343,7 @@ function Login({ onSignedIn }: { onSignedIn?: () => void }) {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-dark-bg">
       <div className="max-w-md w-full bg-white dark:bg-dark-surface rounded-lg shadow-md p-8">
+          <AuthLanguageSelect />
         <div className="text-center mb-8">
           <img src={theme === 'dark' ? '/icon.svg' : '/icon-light.svg'} className="w-16 h-16 mx-auto mb-4" alt="Health Assistant Logo" />
           <h1 className="text-3xl font-bold text-blue-600">Health Assistant</h1>

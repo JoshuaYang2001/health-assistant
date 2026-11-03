@@ -16,7 +16,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatDistanceToNow, isValid } from 'date-fns';
-import { el, enUS } from 'date-fns/locale';
+import { getDateLocale } from '../../lib/dateLocale';
 import type { Locale } from 'date-fns';
 import { Inbox, ExternalLink, Calendar } from 'lucide-react';
 import { DynamicIcon } from '../ui/DynamicIcon';
@@ -37,7 +37,7 @@ export const InstancePreview: React.FC<InstancePreviewProps> = ({
   emptyHint,
 }) => {
   const { t, i18n } = useTranslation();
-  const locale: Locale = i18n.language.startsWith('el') ? el : enUS;
+  const locale: Locale = getDateLocale(i18n.language);
 
   if (!row) {
     return (
