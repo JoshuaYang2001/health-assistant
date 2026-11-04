@@ -1,6 +1,8 @@
 # ruff: noqa: E501 -- pre-existing long lines, moved verbatim from integrations/; reflow when touched
 import contextlib
 import datetime
+import hashlib
+import json
 import logging
 import re
 from typing import Any
@@ -23,6 +25,7 @@ MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 # ``bridge_features`` (flags, not semver math, drive client gating). Single
 # source of truth for ``_api_status`` and the exported sub-API schema.
 BRIDGE_FEATURES: list[str] = [
+    "flat_record_idempotency",
     "exam_enrichment",  # enriched exam list/detail (2026-10-10)
     "ai_assistant",  # /ai/* chat paths (R7 P1)
     "ai_streaming",  # POST /ai/chat/stream SSE (R7 P2)
@@ -189,6 +192,7 @@ def _dedup_by_biomarker(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 class ClientRecord(BaseModel):
+    external_id: str | None = Field(None, min_length=1, max_length=128)
     type: str = Field(..., description="'quantitative' or 'categorical'")
     biomarker_id: str | None = Field(None, description="UUID of the mapped biomarker definition")
     code: str | None = None
@@ -201,6 +205,69 @@ class ClientRecord(BaseModel):
     reference_range: dict[str, float] | None = None
     interpretation: str | None = None
     performer: str | None = None
+
+
+async def _claim_flat_records(db, integration, source_system: str, records: list[ClientRecord]):
+    from sqlalchemy import select
+    from sqlalchemy.dialects.postgresql import insert
+
+    from app.models.user_integration import BridgeRecordReceipt
+
+    if any(record.external_id is not None for record in records) and (
+        not source_system.strip() or len(source_system) > 128
+    ):
+        raise ValueError("A nonempty source system of at most 128 characters is required")
+
+    accepted = []
+    for record in records:
+        if record.external_id is None:
+            accepted.append(record)
+            continue
+        body = json.dumps(
+            record.model_dump(mode="json", exclude_none=True),
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
+        digest = hashlib.sha256(body).hexdigest()
+        values = {
+            "integration_id": integration.id,
+            "tenant_id": integration.tenant_id,
+            "patient_id": integration.patient_id,
+            "source_system": source_system,
+            "external_id": record.external_id,
+            "body_hash": digest,
+        }
+        inserted = await db.execute(
+            insert(BridgeRecordReceipt)
+            .values(**values)
+            .on_conflict_do_nothing(
+                index_elements=["integration_id", "source_system", "external_id"]
+            )
+            .returning(BridgeRecordReceipt.body_hash)
+        )
+        if inserted.scalar_one_or_none() is not None:
+            accepted.append(record)
+            continue
+        existing = await db.execute(
+            select(
+                BridgeRecordReceipt.body_hash,
+                BridgeRecordReceipt.tenant_id,
+                BridgeRecordReceipt.patient_id,
+            ).where(
+                BridgeRecordReceipt.integration_id == integration.id,
+                BridgeRecordReceipt.source_system == source_system,
+                BridgeRecordReceipt.external_id == record.external_id,
+            )
+        )
+        prior = existing.one()
+        if (
+            prior.body_hash != digest
+            or prior.tenant_id != integration.tenant_id
+            or prior.patient_id != integration.patient_id
+        ):
+            raise ValueError("A bridge record identifier was reused with different data")
+    return accepted
 
 
 class ClientExaminationRecord(BaseModel):
@@ -2889,8 +2956,11 @@ class HealthAssistantBridgeProvider(BaseHealthProvider):
 
                 # 2. Process Flat Records
                 if sync_payload.records:
+                    accepted_records = await _claim_flat_records(
+                        db, integration, sync_payload.source_system, sync_payload.records
+                    )
                     flat_obs = self._parse_records(
-                        sync_payload.records,
+                        accepted_records,
                         builder,
                         str(integration.id),
                         integration.instance_name,

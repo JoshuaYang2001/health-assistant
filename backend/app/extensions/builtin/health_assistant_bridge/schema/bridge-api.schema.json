@@ -74,6 +74,7 @@
     "signedStatus": "BridgeStatus",
     "featureFlags": {
       "vocabulary": [
+        "flat_record_idempotency",
         "exam_enrichment",
         "ai_assistant",
         "ai_streaming"
@@ -5747,6 +5748,20 @@
     },
     "ClientRecord": {
       "properties": {
+        "external_id": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "External Id"
+        },
         "type": {
           "description": "'quantitative' or 'categorical'",
           "title": "Type",

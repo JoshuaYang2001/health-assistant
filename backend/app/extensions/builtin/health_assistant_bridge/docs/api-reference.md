@@ -278,7 +278,10 @@ The `cursor` in the request body is **opaque to the server** — it's stored as-
 ### Deduplication & Idempotency
 
 - **Grouped examinations**: dedup keys on `(tenant, patient, integration_id, examination.id)`. **Always pass the upstream's stable `id`** (the portal's `reportId` / `encounterId`) — without it every sync creates a duplicate exam. A re-pull of the same upstream file is a no-op: the exam and its nested records are skipped.
-- **Flat records**: rely on backend heuristics (matching timestamps + values) — weaker. For structured lab data, prefer grouped examinations with explicit ids.
+- **Flat records**: optionally provide `external_id` and a stable `source_system`.
+  For a given integration and source system, retries with the same identifier and
+  content are ignored atomically; reusing the identifier with different content
+  is rejected. Records without `external_id` have no guaranteed deduplication.
 
 ## Read & management paths
 

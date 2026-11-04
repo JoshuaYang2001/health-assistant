@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 BridgeErrorCode = Literal["hitl_conflict", "not_found", "stt_failed", "turn_conflict", "validation"]
 STREAM_EVENT_NAMES = Literal["citation", "delta", "flow_failed", "flow_finished", "flow_started", "interrupt", "node_finished", "node_started", "session", "task", "tool_call"]
-BRIDGE_FEATURE_FLAGS = ["exam_enrichment", "ai_assistant", "ai_streaming"]
+BRIDGE_FEATURE_FLAGS = ["flat_record_idempotency", "exam_enrichment", "ai_assistant", "ai_streaming"]
 
 class BridgeStatus(BaseModel):
     status: str
@@ -60,6 +60,7 @@ class ClientExaminationRecord(BaseModel):
 
 class ClientRecord(BaseModel):
     """Extracted from the live payload model ClientRecord"""
+    external_id: Optional[str] = None
     type: str
     biomarker_id: Optional[str] = None
     code: Optional[str] = None

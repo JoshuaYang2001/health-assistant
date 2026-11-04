@@ -10,6 +10,7 @@ export type BridgeErrorCode =
   "validation";
 
 export type BridgeFeature =
+  "flat_record_idempotency" |
   "exam_enrichment" |
   "ai_assistant" |
   "ai_streaming";
@@ -49,7 +50,7 @@ export const STREAM_EVENT_NAMES = [
   "tool_call",
 ] as const;
 
-export const BRIDGE_FEATURE_FLAGS = ["exam_enrichment","ai_assistant","ai_streaming"] as const;
+export const BRIDGE_FEATURE_FLAGS = ["flat_record_idempotency","exam_enrichment","ai_assistant","ai_streaming"] as const;
 
 export interface BridgeStatus {
   status: string;
@@ -107,6 +108,7 @@ export interface ClientExaminationRecord {
 
 export interface ClientRecord {
 /** Extracted from the live payload model ClientRecord */
+  external_id?: string | null;
   type: string;
   biomarker_id?: string | null;
   code?: string | null;

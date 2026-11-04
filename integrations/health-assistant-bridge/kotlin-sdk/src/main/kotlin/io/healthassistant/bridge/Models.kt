@@ -83,6 +83,7 @@ data class ClientRecord(
     @SerialName("reference_range") val referenceRange: ReferenceRange? = null,
     val interpretation: String? = null,
     val performer: String? = null,
+    @SerialName("external_id") val externalId: String? = null,
 )
 
 @Serializable

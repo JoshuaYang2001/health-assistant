@@ -57,6 +57,26 @@ class UserIntegration(Base, UUIDMixin, TenantMixin, AuditMixin, TimestampMixin):
     )
 
 
+class BridgeRecordReceipt(Base):
+    __tablename__ = "bridge_record_receipts"
+
+    integration_id = Column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("user_integrations.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    tenant_id = Column(
+        PG_UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False
+    )
+    patient_id = Column(
+        PG_UUID(as_uuid=True), ForeignKey("fhir_patients.id", ondelete="CASCADE"), nullable=False
+    )
+    source_system = Column(String(128), primary_key=True)
+    external_id = Column(String(128), primary_key=True)
+    body_hash = Column(String(64), nullable=False)
+    created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+
 class IntegrationSyncLog(Base, UUIDMixin, TenantMixin):
     __tablename__ = "integration_sync_logs"
 

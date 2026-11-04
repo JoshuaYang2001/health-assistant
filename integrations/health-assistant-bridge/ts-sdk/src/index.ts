@@ -54,6 +54,7 @@ export interface MapResponsePayload {
 }
 
 export interface ClientRecord {
+  external_id?: string | null;
   type: "quantitative" | "categorical";
   biomarker_id?: string | null;
   code?: string | null;

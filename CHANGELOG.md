@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added (experimental device ingestion)
+- Add a macOS Accu-Chek Instant Bluetooth history preview and conservative
+  glucose decoding. Import remains disabled until verified against the meter.
+- Add patient-scoped, atomic Bridge idempotency keys for flat records and a
+  read-only Philips SD-card directory inspector. Raw SD-card import remains
+  unimplemented pending validation against an actual card.
+
 ### Added (localization)
 - Simplified Chinese interface translations with language switching on login,
   first-run setup, the header, and preferences. Chinese selections persist in

@@ -31,6 +31,7 @@ class MapResponsePayload(BaseModel):
     mappings: List[MappedMetric]
 
 class ClientRecord(BaseModel):
+    external_id: Optional[str] = Field(default=None, min_length=1, max_length=128)
     type: Literal["quantitative", "categorical"]
     biomarker_id: Optional[str] = None
     code: Optional[str] = None
